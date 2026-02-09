@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#FFF8F0">
+  <title>Sight Words</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@400;600;700;800;900&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=5">
+</head>
+<body>
+  <div id="app">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header__row">
+        <button class="sticker-btn" id="stickerBtn" aria-label="View stickers">
+          <span class="sticker-btn__icon">🏆</span>
+          <span class="sticker-btn__count" id="stickerCount">0</span>
+        </button>
+        <h1 class="header__title">
+          <span class="header__name" id="childName" role="button" tabindex="0"
+                aria-label="Tap to edit child's name">Luna</span>'s Words
+        </h1>
+        <button class="settings-btn" id="settingsBtn" aria-label="Settings">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- SCREEN: GRID VIEW -->
+    <main class="screen screen--grid" id="screenGrid">
+      <div class="card-grid" id="cardGrid" aria-live="polite">
+        <!-- Cards rendered by JS -->
+      </div>
+      <div class="grid-footer">
+        <button class="play-btn" id="playBtn" aria-label="Start practice">
+          <span class="play-btn__icon">▶</span>
+          <span class="play-btn__label">Let's Play!</span>
+        </button>
+      </div>
+    </main>
+
+    <!-- SCREEN: PLAY MODE -->
+    <main class="screen screen--play hidden" id="screenPlay">
+      <div class="play-header">
+        <button class="back-btn" id="backBtn" aria-label="Back to grid">
+          ← Back
+        </button>
+        <div class="play-progress" id="playProgress">
+          <div class="play-progress__track">
+            <div class="play-progress__bar" id="progressBar"></div>
+          </div>
+          <span class="play-progress__text" id="progressText">1 / 12</span>
+        </div>
+      </div>
+      <div class="streak-meter" id="streakMeter">
+        <div class="streak-dot" data-pos="1"></div>
+        <div class="streak-dot" data-pos="2"></div>
+        <div class="streak-dot streak-dot--milestone" data-pos="3" data-emoji="🔥"></div>
+        <div class="streak-dot" data-pos="4"></div>
+        <div class="streak-dot streak-dot--milestone" data-pos="5" data-emoji="⚡"></div>
+        <div class="streak-dot" data-pos="6"></div>
+        <div class="streak-dot" data-pos="7"></div>
+        <div class="streak-dot streak-dot--milestone" data-pos="8" data-emoji="🌟"></div>
+      </div>
+      <div class="card-stack" id="cardStack">
+        <!-- Current card rendered by JS -->
+      </div>
+      <div class="play-hints">
+        <span class="hint hint--left" id="hintLeft">✗ Try again</span>
+        <span class="hint hint--right" id="hintRight">✓ Got it!</span>
+      </div>
+    </main>
+
+    <!-- SCREEN: CONGRATS -->
+    <main class="screen screen--congrats hidden" id="screenCongrats">
+      <canvas id="confettiCanvas"></canvas>
+      <div class="congrats-content" id="congratsContent">
+        <div class="congrats__emoji">⭐</div>
+        <h2 class="congrats__title">Amazing, <span id="congratsName">Luna</span>!</h2>
+        <p class="congrats__subtitle">You did it!</p>
+        <div class="congrats__stats" id="congratsStats"></div>
+        <button class="play-btn" id="playAgainBtn">Play Again</button>
+        <button class="back-btn back-btn--congrats" id="backToGridBtn">Back to Words</button>
+      </div>
+    </main>
+
+    <!-- NAME EDIT MODAL -->
+    <div class="modal hidden" id="nameModal">
+      <div class="modal__backdrop" id="modalBackdrop"></div>
+      <div class="modal__content">
+        <label class="modal__label" for="nameInput">Child's Name</label>
+        <input class="modal__input" id="nameInput" type="text"
+               maxlength="20" autocomplete="off" spellcheck="false" />
+        <button class="modal__save" id="nameSave">Save</button>
+      </div>
+    </div>
+
+    <!-- STICKER SHEET MODAL -->
+    <div class="modal hidden" id="stickerModal">
+      <div class="modal__backdrop" id="stickerBackdrop"></div>
+      <div class="modal__content modal__content--sticker-sheet">
+        <h2 class="sticker-sheet__name" id="stickerSheetName">Luna's Stickers</h2>
+        <p class="sticker-sheet__count" id="stickerSheetCount">0 collected</p>
+        <div class="sticker-grid" id="stickerGrid"></div>
+        <button class="modal__save" id="stickerClose">Done</button>
+      </div>
+    </div>
+
+    <!-- CONTROL PANEL MODAL -->
+    <div class="modal hidden" id="controlModal">
+      <div class="modal__backdrop" id="controlBackdrop"></div>
+      <div class="modal__content modal__content--control">
+        <h2 class="control__title">Settings</h2>
+
+        <div class="control__section">
+          <h3 class="control__label">Student Name</h3>
+          <input type="text" class="control__name-input" id="controlNameInput" maxlength="20" placeholder="Enter name">
+        </div>
+
+        <div class="control__section">
+          <h3 class="control__label">Theme</h3>
+          <div class="control__theme-options" id="themeOptions">
+            <button class="theme-option theme-option--active" data-theme="candy">
+              <span class="theme-option__preview" style="background:#FFF8F0; border: 1px solid #eee"></span>
+              <span class="theme-option__name">Candy</span>
+            </button>
+            <button class="theme-option" data-theme="win95">
+              <span class="theme-option__preview" style="background:#008000"></span>
+              <span class="theme-option__name">Win95</span>
+            </button>
+            <button class="theme-option" data-theme="notebook">
+              <span class="theme-option__preview" style="background:#E6E8E6; border: 1px solid #ccc"></span>
+              <span class="theme-option__name">Notebook</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="control__section">
+          <h3 class="control__label">Rewards</h3>
+          <label class="control__toggle">
+            <input type="checkbox" id="toggleStreak" checked>
+            <span class="control__toggle-switch"></span>
+            <span class="control__toggle-text">Streak Confetti</span>
+          </label>
+          <label class="control__toggle">
+            <input type="checkbox" id="toggleStickers" checked>
+            <span class="control__toggle-switch"></span>
+            <span class="control__toggle-text">Sticker Collection</span>
+          </label>
+          <label class="control__toggle">
+            <input type="checkbox" id="toggleMastery" checked>
+            <span class="control__toggle-switch"></span>
+            <span class="control__toggle-text">Card Glow-Up</span>
+          </label>
+          <label class="control__toggle">
+            <input type="checkbox" id="toggleSkipMastered">
+            <span class="control__toggle-switch"></span>
+            <span class="control__toggle-text">Skip Mastered Cards</span>
+          </label>
+        </div>
+
+        <div class="control__section">
+          <button class="control__share-btn" id="controlShareBtn">📋 Copy Share Link</button>
+        </div>
+
+        <button class="modal__save" id="controlClose">Done</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js?v=4" defer></script>
+</body>
+</html>
