@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Threaded HTTP server for local development."""
+"""Threaded HTTP server for local development.
+Run from repo root to serve all projects."""
 import sys
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from socketserver import ThreadingMixIn

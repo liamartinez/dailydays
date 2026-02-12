@@ -1,8 +1,8 @@
 // storagebar.js — macOS/Windows-style horizontal storage bar
 // Pure DOM, no D3 needed.
 
-import { volumeByTag, totalVolume, statusSummary, potentialSpaceSaved, formatVolume, countByTag } from './store.js?v=4';
-import { ROOM_COLORS, formatLabel } from './colors.js?v=4';
+import { volumeByTag, totalVolume, statusSummary, potentialSpaceSaved, formatVolume, countByTag } from '../../shared/js/store.js';
+import { ROOM_COLORS, formatLabel } from '../../shared/js/colors.js';
 
 export function renderStorageBar(container, objects, { onSegmentClick, drillPath }) {
   container.innerHTML = '';

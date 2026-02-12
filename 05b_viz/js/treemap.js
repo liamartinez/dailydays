@@ -1,8 +1,8 @@
 // treemap.js — D3.js treemap visualization (WinDirStat-style)
 // Edge-to-edge cells with cushion shading, room watermark labels, rich tooltip.
 
-import { formatVolume, staleness } from './store.js?v=4';
-import { ROOM_COLORS, formatLabel } from './colors.js?v=4';
+import { formatVolume, staleness } from '../../shared/js/store.js';
+import { ROOM_COLORS, formatLabel } from '../../shared/js/colors.js';
 
 const d3 = window.d3;
 

@@ -1,9 +1,9 @@
 // sunburst.js — DaisyDisk-style radial sunburst visualization
 // Uses d3.partition for radial layout with d3.arc for rendering.
 
-import { formatVolume } from './store.js?v=4';
-import { ROOM_COLORS, formatLabel } from './colors.js?v=4';
-import { buildHierarchy } from './treemap.js?v=4';
+import { formatVolume } from '../../shared/js/store.js';
+import { ROOM_COLORS, formatLabel } from '../../shared/js/colors.js';
+import { buildHierarchy } from './treemap.js';
 
 const d3 = window.d3;
 

@@ -5,8 +5,9 @@ import {
   filterMultiple, sortBy, totalVolume, statusSummary,
   potentialSpaceSaved, formatVolume, uniqueTagValues,
   staleness, countByTag, volumeByTag,
-} from './store.js';
-import { TAG_DEFINITIONS } from './data.js';
+} from '../../shared/js/store.js';
+import { TAG_DEFINITIONS } from '../../shared/js/data.js';
+import { formatLabel, pluralize } from '../../shared/js/colors.js';
 
 // ─── Render the full UI ───
 
@@ -223,11 +224,6 @@ function el(tag, className) {
   return e;
 }
 
-function formatLabel(str) {
-  if (!str) return '';
-  return str.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-}
-
 function formatDate(dateStr) {
   if (!dateStr) return '—';
   const d = new Date(dateStr);
@@ -289,12 +285,6 @@ function statusLabel(status) {
     case 'removed': return 'Remove';
     default: return status;
   }
-}
-
-function pluralize(word) {
-  if (word.endsWith('y') && !/[aeiou]y$/i.test(word)) return word.slice(0, -1) + 'ies';
-  if (word.endsWith('s') || word.endsWith('sh') || word.endsWith('ch') || word.endsWith('x') || word.endsWith('z')) return word + 'es';
-  return word + 's';
 }
 
 function nextStatus(current) {

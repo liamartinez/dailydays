@@ -1,9 +1,9 @@
 // app.js — State management and UI wiring
 // Extended for disk-analyzer visualization with treemap, sunburst, and list views.
 
-import { OBJECTS } from './data.js?v=4';
-import { renderApp } from './ui.js?v=4';
-import * as store from './store.js?v=4';
+import { OBJECTS } from '../../shared/js/data.js';
+import { renderApp } from './ui.js';
+import * as store from '../../shared/js/store.js';
 
 const state = {
   objects: OBJECTS,

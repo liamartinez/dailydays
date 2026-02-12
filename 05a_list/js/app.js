@@ -1,9 +1,9 @@
 // app.js — State management and UI wiring
 // Follows the 30Ducks pattern: state object, init(), event-driven re-renders.
 
-import { OBJECTS } from './data.js';
+import { OBJECTS } from '../../shared/js/data.js';
 import { renderUI } from './ui.js';
-import * as store from './store.js';
+import * as store from '../../shared/js/store.js';
 
 const state = {
   objects: OBJECTS,

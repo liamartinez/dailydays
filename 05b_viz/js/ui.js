@@ -5,12 +5,12 @@ import {
   filterMultiple, sortBy, totalVolume, statusSummary,
   potentialSpaceSaved, formatVolume, uniqueTagValues,
   staleness, countByTag, volumeByTag, groupByTag,
-} from './store.js?v=4';
-import { TAG_DEFINITIONS } from './data.js?v=4';
-import { renderStorageBar } from './storagebar.js?v=4';
-import { renderTreemap } from './treemap.js?v=4';
-import { renderSunburst } from './sunburst.js?v=4';
-import { ROOM_COLORS, formatLabel, pluralize } from './colors.js?v=4';
+} from '../../shared/js/store.js';
+import { TAG_DEFINITIONS } from '../../shared/js/data.js';
+import { renderStorageBar } from './storagebar.js';
+import { renderTreemap } from './treemap.js';
+import { renderSunburst } from './sunburst.js';
+import { ROOM_COLORS, formatLabel, pluralize } from '../../shared/js/colors.js';
 
 export { ROOM_COLORS, formatLabel, pluralize };
 
