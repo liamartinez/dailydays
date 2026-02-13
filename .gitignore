@@ -2,3 +2,4 @@
 .claude/
 *.swp
 *~
+scripts/node_modules/

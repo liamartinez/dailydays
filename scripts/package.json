@@ -1,0 +1,15 @@
+{
+  "name": "dailydays-photo-generator",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Generate AI photos for household inventory items using DALL-E 3",
+  "scripts": {
+    "generate": "node generate-photos.mjs",
+    "dry-run": "node generate-photos.mjs --dry-run",
+    "sample": "node generate-photos.mjs --sample 25"
+  },
+  "dependencies": {
+    "openai": "^4.73.0",
+    "sharp": "^0.33.2"
+  }
+}

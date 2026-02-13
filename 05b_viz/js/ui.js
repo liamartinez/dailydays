@@ -11,6 +11,7 @@ import { renderStorageBar } from './storagebar.js';
 import { renderTreemap } from './treemap.js';
 import { renderSunburst } from './sunburst.js';
 import { ROOM_COLORS, formatLabel, pluralize } from '../../shared/js/colors.js';
+import { imageUrl } from '../../shared/js/images.js';
 
 export { ROOM_COLORS, formatLabel, pluralize };
 
@@ -231,6 +232,18 @@ function renderDetailPanel(container, item, state, onStateChange) {
   name.textContent = item.name;
   header.appendChild(name);
   container.appendChild(header);
+
+  // Photo
+  const photoWrap = document.createElement('div');
+  photoWrap.className = 'detail-photo';
+  const photo = document.createElement('img');
+  photo.src = imageUrl(item.id);
+  photo.alt = item.name;
+  photo.className = 'detail-photo-img';
+  photo.loading = 'lazy';
+  photo.onerror = function () { photoWrap.style.display = 'none'; };
+  photoWrap.appendChild(photo);
+  container.appendChild(photoWrap);
 
   // Path (room > category)
   const path = document.createElement('div');

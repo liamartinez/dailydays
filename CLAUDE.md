@@ -10,16 +10,23 @@ Dailydays/
     js/data.js       (470 items: RAW array, TAG_DEFINITIONS, OBJECTS expansion)
     js/store.js      (pure functions: filter, sort, group, aggregate, format)
     js/colors.js     (ROOM_COLORS palette, formatLabel, pluralize)
+    js/images.js     (imageUrl helper, createPhotoEl for AI-generated photos)
     css/reset.css    (minimal CSS reset)
     css/tokens.css   (CSS custom properties: colors, fonts, radii)
+    images/          (AI-generated item photos: {id}.webp + {id}-thumb.webp)
     CLAUDE.md        (data generation guide — RAW schema, personas, rules)
+
+  scripts/           ← Photo generation tooling
+    generate-photos.py  (DALL-E 3 batch generator)
+    prompt_builder.py   (prompt construction from item metadata)
 
   _template/         ← Copy this to start a new experiment
     index.html, css/theme.css, js/app.js, js/ui.js
 
-  05a_list/          ← List-based inventory view
-  05b_viz/           ← WinDirStat treemap + sunburst visualization
-  05c_*/             ← Next experiment...
+  05a_list/          ← List-based inventory view (with thumbnails)
+  05b_viz/           ← WinDirStat treemap + sunburst visualization (with detail photos)
+  05c_gallery/       ← Photo gallery with room-grouped grid + lightbox
+  05d_*/             ← Next experiment...
 
   server.py          ← Threaded HTTP server (run from repo root)
   index.html         ← Landing page with links to all projects
@@ -74,6 +81,34 @@ Or use `/new-experiment {name}`.
 ```bash
 python3 server.py        # serves on http://localhost:8766
 ```
+
+## Item Photos
+
+AI-generated photos of each inventory item, stored in `shared/images/`.
+
+### Image Paths
+Image URL is deterministic from item ID — no mapping needed:
+```js
+import { imageUrl } from '../../shared/js/images.js';
+imageUrl('obj-001')       // '../../shared/images/obj-001.webp'      (512×512)
+imageUrl('obj-001', true) // '../../shared/images/obj-001-thumb.webp' (128×128)
+```
+
+### Generating Photos
+```bash
+cd scripts
+pip3 install openai Pillow    # one-time setup
+export OPENAI_API_KEY=sk-...
+
+python3 generate-photos.py --dry-run          # preview prompts
+python3 generate-photos.py --sample 25        # generate 25 diverse items (~$1)
+python3 generate-photos.py --room kitchen     # generate for a room
+python3 generate-photos.py --ids obj-001,obj-005  # specific items
+python3 generate-photos.py                    # all remaining items (~$19)
+```
+
+### Graceful Degradation
+All views use `img.onerror` to fall back to emoji icons when a photo hasn't been generated yet. The app works with 0, 25, or all 470 images.
 
 ## Data Generation
 See `shared/CLAUDE.md` for the RAW schema and persona generation guide.

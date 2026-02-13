@@ -241,6 +241,19 @@ body {
   font-weight: 600;
 }
 
+.detail-photo {
+  margin: 8px 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.detail-photo-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius-sm);
+}
+
 .detail-path {
   font-size: 0.7rem;
   color: var(--text-secondary);

@@ -8,6 +8,7 @@ import {
 } from '../../shared/js/store.js';
 import { TAG_DEFINITIONS } from '../../shared/js/data.js';
 import { formatLabel, pluralize } from '../../shared/js/colors.js';
+import { imageUrl } from '../../shared/js/images.js';
 
 // ─── Render the full UI ───
 
@@ -148,10 +149,21 @@ function renderObjectList(state, onStateChange) {
 function renderObjectRow(obj, state, onStateChange) {
   const row = el('div', `object-row status-${obj.status}`);
 
-  // Icon
-  const icon = el('span', 'obj-icon');
-  icon.textContent = obj.icon;
-  row.appendChild(icon);
+  // Icon / Thumbnail
+  const iconWrap = el('div', 'obj-icon-wrap');
+  const img = document.createElement('img');
+  img.src = imageUrl(obj.id, true);
+  img.alt = obj.name;
+  img.className = 'obj-thumb';
+  img.loading = 'lazy';
+  img.onerror = function () {
+    this.style.display = 'none';
+    const emoji = el('span', 'obj-icon-fallback');
+    emoji.textContent = obj.icon;
+    iconWrap.appendChild(emoji);
+  };
+  iconWrap.appendChild(img);
+  row.appendChild(iconWrap);
 
   // Info
   const info = el('div', 'obj-info');
