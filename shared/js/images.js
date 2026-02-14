@@ -2,7 +2,9 @@
 // Images are stored in shared/images/ as {id}.webp (512x512) and {id}-thumb.webp (128x128).
 // If an image doesn't exist, graceful fallback via onerror.
 
-const BASE = '../../shared/images/';
+// Derive base from this module's own URL so paths work on both
+// localhost (root = repo) and GitHub Pages (root = /dailydays/).
+const BASE = new URL('../images/', import.meta.url).href;
 
 /**
  * Get the URL for an item's photo.
