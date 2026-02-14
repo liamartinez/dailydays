@@ -19,6 +19,8 @@ const state = {
   sortDirection: 'desc',
   totalCapacity: 12500,
   recommendations: [],
+  dismissedRecs: [],          // rec IDs dismissed this session
+  itemsLayout: 'grid',       // 'list' | 'grid'
 };
 
 function init() {
@@ -30,8 +32,9 @@ function init() {
     if (saved) state.triageDecisions = JSON.parse(saved);
   } catch (e) { /* ignore */ }
 
-  // Compute initial recommendations
-  state.recommendations = generateRecommendations(state.objects, state.triageDecisions);
+  // Compute recommendations (held back for intro animation)
+  const allRecs = generateRecommendations(state.objects, state.triageDecisions);
+  state.recommendations = [];  // start empty for intro effect
 
   function render() {
     renderApp(container, state, (changes) => {
@@ -48,6 +51,17 @@ function init() {
   }
 
   render();
+
+  // Intro animation: reveal recommendations after a short delay
+  setTimeout(() => {
+    state.recommendations = allRecs;
+    state._recsAnimating = true;
+    render();
+    // Clear animation flag after animations finish
+    setTimeout(() => {
+      state._recsAnimating = false;
+    }, 800);
+  }, 2000);
 
   // Expose for debugging
   window.__store = store;

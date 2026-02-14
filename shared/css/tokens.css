@@ -29,3 +29,15 @@
 
   --transition: 0.2s ease;
 }
+
+/* iOS Light Mode palette */
+.theme-light {
+  --bg-primary: #F2F2F7;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #F2F2F7;
+  --bg-quaternary: #E5E5EA;
+  --text-primary: #000000;
+  --text-secondary: #8E8E93;
+  --text-tertiary: #C7C7CC;
+  /* Accent colors unchanged — inherited from :root */
+}

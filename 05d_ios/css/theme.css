@@ -5,17 +5,103 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
-  background: var(--bg-primary);
+  background: #2c2c2e;
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
 
+/* ─── iPhone Frame ─── */
+.iphone-frame {
+  width: 393px;
+  height: 852px;
+  border-radius: 55px;
+  border: 4px solid #3a3a3c;
+  background: var(--bg-primary);
+  box-shadow:
+    0 0 0 2px rgba(0,0,0,0.3),
+    0 20px 60px rgba(0,0,0,0.5),
+    inset 0 0 0 1px rgba(255,255,255,0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ─── Status Bar ─── */
+.iphone-status-bar {
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px 0;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.status-time {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  width: 54px;
+}
+
+.status-notch {
+  width: 126px;
+  height: 36px;
+  background: #1d1d1f;
+  border-radius: 20px;
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  transform: translateX(-50%);
+}
+
+.status-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 54px;
+  justify-content: flex-end;
+}
+
+.status-signal, .status-battery {
+  color: var(--text-primary);
+}
+
+/* ─── App Container ─── */
+#app {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ─── Home Indicator ─── */
+.iphone-home-indicator {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.home-pill {
+  width: 134px;
+  height: 5px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
+
+/* ─── iOS App Wrapper (rendered inside #app) ─── */
 .ios-app {
-  max-width: 430px;
-  margin: 0 auto;
-  padding-bottom: 40px;
-  min-height: 100vh;
+  padding-bottom: 20px;
 }
 
 /* ─── Header ─── */
@@ -34,7 +120,7 @@ body {
 .storage-card {
   background: var(--bg-secondary);
   border-radius: 12px;
-  margin: 8px 16px;
+  margin: 12px 16px;
   padding: 16px;
 }
 
@@ -57,17 +143,31 @@ body {
 
 .storage-bar {
   display: flex;
-  height: 10px;
-  border-radius: 5px;
+  height: 12px;
+  border-radius: 6px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.08);
-  gap: 1px;
+  background: rgba(0, 0, 0, 0.06);
+  gap: 0;
 }
 
 .segment {
-  transition: width 0.4s ease;
+  cursor: pointer;
+  transition: width 0.4s ease, filter 0.15s ease;
   min-width: 2px;
-  border-radius: 1px;
+  border-radius: 0;
+}
+
+.segment:hover {
+  filter: brightness(1.15);
+}
+
+.segment:active {
+  filter: brightness(0.9);
+}
+
+.segment-remainder {
+  cursor: default;
+  pointer-events: none;
 }
 
 .storage-legend {
@@ -86,8 +186,8 @@ body {
 }
 
 .legend-dot {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -110,18 +210,46 @@ body {
 }
 
 .triage-badge.donate {
-  background: rgba(0, 122, 255, 0.15);
-  color: #64B5F6;
+  background: rgba(0, 122, 255, 0.1);
+  color: #007AFF;
 }
 
 .triage-badge.toss {
-  background: rgba(255, 69, 58, 0.15);
-  color: #FF6B6B;
+  background: rgba(255, 69, 58, 0.1);
+  color: #FF453A;
 }
 
 /* ─── Recommendations ─── */
 .recs-section {
-  margin: 16px 16px 8px;
+  margin: 8px 16px;
+}
+
+/* Intro animation: recs slide in when first revealed */
+.recs-section.recs-animating .recs-header {
+  animation: recSlideIn 0.45s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+.recs-section.recs-animating .rec-card:nth-child(2) {
+  animation: recSlideIn 0.45s cubic-bezier(0.32, 0.72, 0, 1) 0.08s both;
+}
+
+.recs-section.recs-animating .rec-card:nth-child(3) {
+  animation: recSlideIn 0.45s cubic-bezier(0.32, 0.72, 0, 1) 0.16s both;
+}
+
+.recs-section.recs-animating .rec-card:nth-child(4) {
+  animation: recSlideIn 0.45s cubic-bezier(0.32, 0.72, 0, 1) 0.24s both;
+}
+
+@keyframes recSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .recs-header {
@@ -133,7 +261,7 @@ body {
 
 .recs-header h2 {
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--text-secondary);
@@ -151,8 +279,21 @@ body {
   transition: background 0.15s;
 }
 
+.rec-dismiss {
+  background: none;
+  border: none;
+  color: rgba(0, 0, 0, 0.25);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 6px;
+  line-height: 1;
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin: -6px -8px -6px 0;
+}
+
 .rec-card:active {
-  background: var(--bg-tertiary);
+  background: var(--bg-quaternary);
 }
 
 .rec-icon {
@@ -162,7 +303,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.06);
   border-radius: 10px;
   flex-shrink: 0;
 }
@@ -173,7 +313,7 @@ body {
 }
 
 .rec-title {
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 600;
   margin-bottom: 2px;
 }
@@ -181,7 +321,7 @@ body {
 .rec-desc {
   font-size: 12px;
   color: var(--text-secondary);
-  line-height: 1.3;
+  line-height: 1.4;
 }
 
 .rec-right {
@@ -200,10 +340,10 @@ body {
 
 .rec-action {
   padding: 5px 14px;
-  background: rgba(0, 122, 255, 0.15);
+  background: rgba(0, 122, 255, 0.1);
   color: var(--accent);
   border: none;
-  border-radius: 14px;
+  border-radius: 16px;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -214,22 +354,22 @@ body {
   opacity: 0.6;
 }
 
-/* ─── Toggle ─── */
+/* ─── Toggle (iOS Segmented Control) ─── */
 .group-toggle {
   display: flex;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
+  background: rgba(120, 120, 128, 0.12);
+  border-radius: 9px;
   padding: 2px;
   margin: 16px 16px 8px;
 }
 
 .toggle-btn {
   flex: 1;
-  padding: 7px 0;
+  padding: 8px 0;
   border: none;
   background: transparent;
   color: var(--text-secondary);
-  border-radius: 6px;
+  border-radius: 7px;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -237,8 +377,9 @@ body {
 }
 
 .toggle-btn.active {
-  background: rgba(255, 255, 255, 0.12);
+  background: #FFFFFF;
   color: var(--text-primary);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12), 0 0 1px rgba(0,0,0,0.04);
 }
 
 /* ─── Group List ─── */
@@ -253,18 +394,24 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
+  padding: 14px 16px;
   cursor: pointer;
   transition: background 0.15s;
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+  position: relative;
 }
 
-.group-row:last-child {
-  border-bottom: none;
+.group-row:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 64px;
+  right: 0;
+  height: 0.5px;
+  background: rgba(0, 0, 0, 0.08);
 }
 
 .group-row:active {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .group-icon {
@@ -284,12 +431,12 @@ body {
 }
 
 .group-name {
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 400;
 }
 
 .group-meta {
-  font-size: 12px;
+  font-size: 15px;
   color: var(--text-secondary);
   margin-top: 1px;
 }
@@ -302,20 +449,20 @@ body {
 
 .chevron {
   font-size: 18px;
-  color: rgba(255, 255, 255, 0.2);
+  color: #C7C7CC;
   font-weight: 300;
 }
 
 /* ─── Drill View ─── */
 .drill-header {
-  padding: 12px 16px 8px;
+  padding: 8px 16px 4px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .drill-header h1 {
-  font-size: 28px;
+  font-size: 34px;
   font-weight: 700;
   letter-spacing: -0.5px;
 }
@@ -335,11 +482,18 @@ body {
   opacity: 0.6;
 }
 
+.back-chevron {
+  vertical-align: middle;
+  margin-right: 4px;
+  position: relative;
+  top: -0.5px;
+}
+
 .drill-stats-card {
   background: var(--bg-secondary);
   border-radius: 12px;
-  margin: 8px 16px;
-  padding: 16px;
+  margin: 12px 16px;
+  padding: 14px 16px;
 }
 
 .drill-stats {
@@ -351,32 +505,108 @@ body {
 .stat-value {
   font-size: 22px;
   font-weight: 700;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.5px;
 }
 
 .stat-label {
   font-size: 12px;
   color: var(--text-secondary);
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 /* ─── Items List ─── */
 .items-section {
-  margin: 8px 16px;
+  margin: 12px 16px;
 }
 
 .items-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 0;
+  padding: 20px 0 8px;
   font-size: 13px;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  font-weight: 400;
+}
+
+/* Sort picker */
+.sort-picker-wrap {
+  position: relative;
+}
+
+.sort-picker-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sort-picker-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 4px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15), 0 0 0 0.5px rgba(0,0,0,0.06);
+  flex-direction: column;
+  z-index: 100;
+  min-width: 180px;
+  overflow: hidden;
+}
+
+.sort-picker-dropdown.open {
+  display: flex;
+}
+
+.sort-option {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.1s;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 0.5px solid rgba(0,0,0,0.06);
+}
+
+.sort-option:last-child {
+  border-bottom: none;
+}
+
+.sort-option:active {
+  background: rgba(0, 122, 255, 0.08);
+}
+
+.sort-option.active {
+  color: var(--accent);
   font-weight: 600;
 }
 
+.sort-option .sort-dir {
+  font-size: 11px;
+  opacity: 0.5;
+}
+
+.sort-option.active .sort-dir {
+  opacity: 1;
+}
+
+/* Legacy sort button (removed but kept for compat) */
 .sort-btn {
   background: none;
   border: none;
@@ -397,18 +627,24 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 16px;
+  padding: 12px 16px;
   cursor: pointer;
   transition: background 0.15s;
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+  position: relative;
 }
 
-.item-row:last-child {
-  border-bottom: none;
+.item-row:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 72px;
+  right: 0;
+  height: 0.5px;
+  background: rgba(0, 0, 0, 0.08);
 }
 
 .item-row:active {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .item-row.triaged {
@@ -434,7 +670,7 @@ body {
   width: 44px;
   height: 44px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.04);
   align-items: center;
   justify-content: center;
   font-size: 22px;
@@ -446,7 +682,7 @@ body {
 }
 
 .item-name {
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 400;
   white-space: nowrap;
   overflow: hidden;
@@ -459,6 +695,11 @@ body {
   margin-top: 1px;
 }
 
+.item-meta.donation-reason {
+  color: #FF9500;
+  font-weight: 500;
+}
+
 .item-triage-badge {
   font-size: 16px;
   flex-shrink: 0;
@@ -468,6 +709,228 @@ body {
   font-size: 15px;
   color: var(--text-secondary);
   flex-shrink: 0;
+}
+
+/* ─── Donation Group Headers ─── */
+.donation-group-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px 8px;
+}
+
+.donation-group-header:first-child {
+  padding-top: 0;
+}
+
+.donation-group-icon {
+  font-size: 22px;
+}
+
+.donation-group-info {
+  flex: 1;
+}
+
+.donation-group-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.donation-group-org {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 1px;
+}
+
+.donation-group-count {
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 600;
+  background: rgba(0, 122, 255, 0.1);
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+
+/* ─── Drill Cards (Progressive Disclosure) ─── */
+.cards-section {
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.drill-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.drill-card:active {
+  background: var(--bg-quaternary);
+}
+
+.drill-card.confirming {
+  background: rgba(0, 122, 255, 0.06);
+  justify-content: center;
+}
+
+.drill-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.drill-card-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.drill-card-subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 1px;
+}
+
+.drill-card-meta {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.drill-card-action {
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.donate-all-btn {
+  padding: 6px 14px;
+  background: rgba(0, 122, 255, 0.1);
+  color: var(--accent);
+  border: none;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+
+.donate-all-btn:active {
+  opacity: 0.6;
+}
+
+/* ─── Thumbnail Collage ─── */
+.thumb-collage {
+  position: relative;
+  width: 60px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.thumb-collage-item {
+  position: absolute;
+  top: 0;
+  width: 44px;
+  height: 44px;
+}
+
+.thumb-collage-img {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 2px solid var(--bg-secondary);
+}
+
+.thumb-collage-emoji {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.04);
+  border: 2px solid var(--bg-secondary);
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+/* ─── Donate Confirmation ─── */
+.confirm-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.confirm-text {
+  font-size: 14px;
+  font-weight: 500;
+  flex: 1;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.confirm-btn {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.confirm-btn.cancel {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text-secondary);
+}
+
+.confirm-btn.confirm {
+  background: var(--accent);
+  color: #FFFFFF;
+}
+
+/* ─── Donation Org Label (in list view) ─── */
+.donation-org-label {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+}
+
+/* ─── Redundancy Group Headers ─── */
+.redundancy-group-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px 8px;
+}
+
+.redundancy-group-header:first-child {
+  padding-top: 0;
+}
+
+.redundancy-group-icon {
+  font-size: 18px;
+}
+
+.redundancy-group-title {
+  font-size: 15px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.redundancy-group-vol {
+  font-size: 12px;
+  color: var(--text-secondary);
 }
 
 /* ─── Wrapped View ─── */
@@ -491,7 +954,7 @@ body {
   flex-direction: column;
   text-align: center;
   padding: 40px 20px;
-  background: linear-gradient(135deg, rgba(0, 122, 255, 0.15), rgba(175, 82, 222, 0.15));
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.1), rgba(175, 82, 222, 0.1));
 }
 
 .wrapped-big-number {
@@ -539,7 +1002,7 @@ body {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.35);
   z-index: 1000;
   display: flex;
   align-items: flex-end;
@@ -572,19 +1035,19 @@ body {
 .modal-handle {
   width: 36px;
   height: 5px;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 3px;
-  margin: 8px auto 4px;
+  margin: 8px auto 8px;
 }
 
 .modal-close {
   position: absolute;
   top: 12px;
   right: 12px;
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.08);
   border: none;
   color: var(--text-secondary);
   font-size: 18px;
@@ -597,13 +1060,13 @@ body {
 }
 
 .modal-close:active {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.12);
 }
 
 .modal-photo {
   width: 100%;
-  height: 280px;
-  background: rgba(255, 255, 255, 0.03);
+  height: 240px;
+  background: rgba(0, 0, 0, 0.02);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -628,7 +1091,7 @@ body {
 }
 
 .modal-name {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: -0.3px;
   margin-bottom: 4px;
@@ -646,7 +1109,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.06);
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 16px;
@@ -679,7 +1142,7 @@ body {
   display: flex;
   justify-content: space-between;
   padding: 8px 0;
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.06);
   font-size: 14px;
 }
 
@@ -714,7 +1177,7 @@ body {
   align-items: center;
   gap: 6px;
   padding: 16px 8px;
-  border: 2px solid rgba(255, 255, 255, 0.12);
+  border: 2px solid rgba(0, 0, 0, 0.1);
   border-radius: 14px;
   background: transparent;
   color: var(--text-primary);
@@ -731,28 +1194,186 @@ body {
 .triage-btn.keep:hover,
 .triage-btn.keep.active {
   border-color: #30D158;
-  background: rgba(48, 209, 88, 0.12);
+  background: rgba(48, 209, 88, 0.1);
 }
 
 .triage-btn.donate:hover,
 .triage-btn.donate.active {
   border-color: var(--accent);
-  background: rgba(0, 122, 255, 0.12);
+  background: rgba(0, 122, 255, 0.1);
 }
 
 .triage-btn.toss:hover,
 .triage-btn.toss.active {
   border-color: #FF453A;
-  background: rgba(255, 69, 58, 0.12);
+  background: rgba(255, 69, 58, 0.1);
 }
 
 .triage-icon {
   font-size: 24px;
 }
 
-/* ─── Utilities ─── */
-@media (min-width: 431px) {
+/* ─── Items Header Controls + Layout Toggle ─── */
+.items-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.layout-toggle {
+  display: flex;
+  background: rgba(120, 120, 128, 0.12);
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.layout-btn {
+  background: transparent;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 4px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s;
+}
+
+.layout-btn.active {
+  background: #FFFFFF;
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* ─── Grid Cards ─── */
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.grid-card {
+  background: var(--bg-secondary);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.grid-card:active {
+  background: var(--bg-quaternary);
+}
+
+.grid-card.triaged {
+  opacity: 0.5;
+}
+
+.grid-card-photo {
+  position: relative;
+  aspect-ratio: 1;
+  background: rgba(0, 0, 0, 0.02);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.grid-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.grid-card-emoji {
+  display: none;
+  font-size: 48px;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid-card-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size: 14px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.grid-card-name {
+  padding: 8px 10px 3px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.grid-card-meta {
+  padding: 0 10px 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* ─── Replay Intro Button ─── */
+
+.replay-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 16px auto 4px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-tertiary);
+  background: none;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.2s;
+}
+
+.replay-btn:active {
+  opacity: 0.5;
+}
+
+.replay-icon {
+  opacity: 0.6;
+}
+
+/* ─── Responsive: Full-viewport on mobile ─── */
+@media (max-width: 430px) {
   body {
-    background: #000;
+    background: var(--bg-primary);
+    align-items: stretch;
+    min-height: auto;
+  }
+
+  .iphone-frame {
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
+
+  .iphone-status-bar {
+    display: none;
+  }
+
+  .iphone-home-indicator {
+    display: none;
+  }
+
+  .status-notch {
+    display: none;
   }
 }
