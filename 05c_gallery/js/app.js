@@ -1,25 +1,68 @@
 // app.js — State management and render loop
-// Photo gallery experiment: room-grouped grid of AI-generated item photos.
+// Exploration gallery: browse items through derived insight tags.
 
-import { OBJECTS, TAG_DEFINITIONS } from '../../shared/js/data.js';
-import * as store from '../../shared/js/store.js';
-import { ROOM_COLORS, formatLabel, pluralize } from '../../shared/js/colors.js';
+import { OBJECTS } from '../../shared/js/data.js';
+import { sortBy } from '../../shared/js/store.js';
+import { computeTags } from './tags.js';
 import { renderApp } from './ui.js';
+import { initSandbox } from './sandbox.js';
+
+// Restore persisted state
+const savedView = localStorage.getItem('gallery-view') || 'landing';
 
 const state = {
   objects: OBJECTS,
-  filters: {},
-  sortField: 'name',
-  sortDirection: 'asc',
-  selectedItemId: null,   // for lightbox
-  roomFilter: null,       // null = all rooms
+  activeTag: null,        // tag id or null for "all"
+  activeRoom: null,       // room key or null for "all rooms"
+  selectedItemId: null,   // for modal detail
+  gridSize: 160,          // card min-width in px (100, 160, or 260)
+  view: savedView,        // 'landing', 'stack', or 'gallery'
+  stackTag: null,         // tag id for card stack view
+  stackIndex: 0,          // current card index in stack
 };
+
+// Pre-compute tags for every item once
+const itemTags = new Map();
+for (const item of OBJECTS) {
+  itemTags.set(item.id, computeTags(item));
+}
+
+/** Get items matching active room + tag filters, sorted */
+export function getVisibleItems() {
+  let items = state.objects;
+  if (state.activeRoom) {
+    items = items.filter(item => item.tags.room === state.activeRoom);
+  }
+  if (state.activeTag) {
+    items = items.filter(item => itemTags.get(item.id).includes(state.activeTag));
+  }
+  return sortBy(items, 'name', 'asc');
+}
+
+/** Get items for a specific tag, sorted by name */
+export function getStackItems(tagId) {
+  if (!tagId) return sortBy([...state.objects], 'name', 'asc');
+  return sortBy(
+    state.objects.filter(item => itemTags.get(item.id).includes(tagId)),
+    'name',
+    'asc'
+  );
+}
+
+/** Get pre-computed tags for an item */
+export function getItemTags(itemId) {
+  return itemTags.get(itemId) || [];
+}
 
 function init() {
   const container = document.getElementById('app');
 
   function render() {
     renderApp(container, state, (changes) => {
+      // Persist view to localStorage
+      if (changes.view) {
+        localStorage.setItem('gallery-view', changes.view);
+      }
       Object.assign(state, changes);
       render();
     });
@@ -27,46 +70,46 @@ function init() {
 
   render();
 
-  // Keyboard navigation for lightbox
+  // Keyboard: Escape
   document.addEventListener('keydown', (e) => {
-    if (!state.selectedItemId) return;
-
     if (e.key === 'Escape') {
-      Object.assign(state, { selectedItemId: null });
-      render();
-    } else if (e.key === 'ArrowRight') {
-      navigateLightbox(1, render);
-    } else if (e.key === 'ArrowLeft') {
-      navigateLightbox(-1, render);
+      if (state.view === 'gallery' && state.selectedItemId) {
+        // Close modal in gallery
+        Object.assign(state, { selectedItemId: null });
+        render();
+      } else if (state.view === 'stack') {
+        // Back to landing from stack
+        Object.assign(state, { view: 'landing', stackTag: null, stackIndex: 0 });
+        localStorage.setItem('gallery-view', 'landing');
+        render();
+      } else if (state.view === 'gallery') {
+        // Back to landing from gallery
+        Object.assign(state, { view: 'landing', activeTag: null, activeRoom: null });
+        localStorage.setItem('gallery-view', 'landing');
+        render();
+      }
+    }
+    // Arrow keys in stack view
+    if (state.view === 'stack') {
+      const items = getStackItems(state.stackTag);
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (state.stackIndex < items.length - 1) {
+          Object.assign(state, { stackIndex: state.stackIndex + 1 });
+          render();
+        }
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (state.stackIndex > 0) {
+          Object.assign(state, { stackIndex: state.stackIndex - 1 });
+          render();
+        }
+      }
     }
   });
 
-  // Expose to console for prototyping
-  window.__store = store;
-  window.__state = state;
-  window.__objects = OBJECTS;
+  // Initialize sandbox controls
+  initSandbox();
 }
-
-function navigateLightbox(direction, render) {
-  const filtered = store.filterMultiple(state.objects, state.filters);
-  const sorted = store.sortBy(filtered, state.sortField, state.sortDirection);
-
-  // If roomFilter is set, filter by room
-  const items = state.roomFilter
-    ? sorted.filter(i => i.tags.room === state.roomFilter)
-    : sorted;
-
-  const currentIndex = items.findIndex(i => i.id === state.selectedItemId);
-  if (currentIndex === -1) return;
-
-  const nextIndex = currentIndex + direction;
-  if (nextIndex >= 0 && nextIndex < items.length) {
-    Object.assign(state, { selectedItemId: items[nextIndex].id });
-    render();
-  }
-}
-
-// Expose navigation for the lightbox arrows
-window.__navigateLightbox = navigateLightbox;
 
 init();
