@@ -1,0 +1,190 @@
+/* ─── Theme B: "Dark Museum" ───
+   Perplexity / editorial inspired.
+   Dark background, full-color photos that pop, sharp edges, ghost UI. */
+
+.theme-b {
+  background: #111;
+  color: #e0e0e0;
+}
+
+/* Header */
+.theme-b .gallery-header {
+  background: #111;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.theme-b .gallery-title {
+  color: #fff;
+  font-weight: 600;
+}
+
+.theme-b .gallery-count { color: #666; }
+
+/* Size buttons — ghost */
+.theme-b .size-btn {
+  border-color: #444;
+  color: #999;
+}
+.theme-b .size-btn:hover { background: #222; color: #fff; }
+.theme-b .size-btn.active {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+
+/* Theme picker */
+.theme-b .theme-btn { border-color: #444; }
+.theme-b .theme-btn.active { border-color: #fff; }
+
+/* Chips — ghost style */
+.theme-b .room-chip {
+  border-color: #333;
+  color: #888;
+}
+.theme-b .room-chip:hover { background: #1a1a1a; color: #ccc; }
+.theme-b .room-chip.active {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+
+.theme-b .tag-chip {
+  border-color: #444;
+  color: #999;
+}
+.theme-b .tag-chip:hover { background: #1a1a1a; color: #fff; }
+.theme-b .tag-chip.active {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+
+/* Grid — tight gaps, no borders */
+.theme-b .gallery-grid {
+  gap: 4px;
+  padding: 4px;
+  border: none;
+}
+
+/* Cards — no borders, no radius, float on dark */
+.theme-b .gallery-card {
+  border: none;
+  transition: box-shadow 0.2s ease;
+}
+.theme-b .gallery-card:hover {
+  background: transparent;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+.theme-b .gallery-card.selected {
+  outline: 1px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 0;
+}
+
+/* Photos — full color, no grayscale */
+.theme-b .card-img { filter: none; }
+.theme-b .gallery-card:hover .card-img { filter: none; }
+
+/* Hover overlay — subtle bottom gradient (dark bg does the work) */
+.theme-b .card-hover-overlay {
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 40%, transparent 100%);
+}
+
+/* Modal — dark panel */
+.theme-b .detail-modal-backdrop { background: rgba(0, 0, 0, 0.85); }
+.theme-b .detail-modal-panel {
+  background: #1a1a1a;
+  border-color: #333;
+}
+.theme-b .modal-photo { background: #222; }
+.theme-b .modal-close {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.2);
+}
+.theme-b .modal-close:hover { background: rgba(255,255,255,0.3); }
+
+/* Modal text */
+.theme-b .detail-name { color: #fff; }
+.theme-b .detail-path { color: #666; }
+.theme-b .detail-desc { color: #aaa; border-color: #2a2a2a; }
+.theme-b .detail-props,
+.theme-b .detail-extra { border-color: #2a2a2a; }
+.theme-b .prop-label { color: #666; }
+.theme-b .prop-value { color: #ccc; }
+.theme-b .detail-tags { border-color: #2a2a2a; }
+.theme-b .tags-label { color: #666; }
+.theme-b .modal-info { border-color: #2a2a2a; }
+
+/* Detail tags — ghost */
+.theme-b .tag-pill {
+  border-color: #444;
+  color: #999;
+}
+.theme-b .tag-pill:hover { background: #222; color: #fff; }
+.theme-b .tag-pill.active {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+
+/* Gallery back button */
+.theme-b .gallery-back-btn {
+  border-color: #444;
+  color: #999;
+}
+.theme-b .gallery-back-btn:hover { background: #222; color: #fff; }
+
+/* ─── Landing ─── */
+.theme-b .landing-title { color: #fff; }
+.theme-b .landing-subtitle { color: #666; }
+
+.theme-b .landing-hero { background: #222; }
+
+.theme-b .landing-card-label { color: #fff; }
+.theme-b .landing-card-subtitle { color: #888; }
+.theme-b .landing-card-count { color: #555; }
+
+.theme-b .landing-mosaic { background: #222; }
+
+/* ─── Stack ─── */
+.theme-b .stack-header { background: #111; }
+.theme-b .stack-back {
+  border-color: #444;
+  color: #999;
+}
+.theme-b .stack-back:hover { background: #222; color: #fff; }
+
+.theme-b .stack-title { color: #fff; }
+.theme-b .stack-subtitle { color: #666; }
+.theme-b .stack-counter { color: #555; }
+
+.theme-b .stack-card {
+  border-color: #333;
+  background: #1a1a1a;
+}
+
+.theme-b .stack-shadow {
+  background: #1a1a1a;
+  border-color: #333;
+}
+
+.theme-b .stack-photo { background: #222; }
+
+.theme-b .stack-item-name { color: #fff; }
+.theme-b .stack-item-meta { color: #666; }
+.theme-b .stack-item-desc { color: #aaa; }
+
+.theme-b .stack-tag-pill {
+  border-color: #444;
+  color: #999;
+}
+
+.theme-b .stack-nav-btn {
+  border-color: #444;
+  color: #999;
+}
+.theme-b .stack-nav-btn:hover { background: #fff; color: #000; border-color: #fff; }
+
+.theme-b .stack-progress { background: #2a2a2a; }
+.theme-b .stack-progress-fill { background: #fff; }
+
+.theme-b .stack-empty { color: #555; }

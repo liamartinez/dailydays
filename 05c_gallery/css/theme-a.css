@@ -1,0 +1,180 @@
+/* ─── Theme A: "Warm Grid" ───
+   Pinterest / OpenPhone inspired.
+   Warm off-white, rounded cards, soft shadows, full-color photos. */
+
+.theme-a {
+  background: #f5f3f0;
+}
+
+/* Header */
+.theme-a .gallery-header {
+  background: #f5f3f0;
+  border-bottom: 1px solid #e0ddd8;
+}
+
+.theme-a .gallery-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.theme-a .gallery-count { color: #999; }
+
+/* Size buttons */
+.theme-a .size-btn {
+  border-color: #ccc;
+  border-radius: 4px;
+}
+.theme-a .size-btn.active {
+  background: #333;
+  border-color: #333;
+}
+
+/* Theme picker in warm context */
+.theme-a .theme-btn.active { border-color: #333; }
+
+/* Chips — pill-shaped, lighter */
+.theme-a .room-chip,
+.theme-a .tag-chip {
+  border-radius: 20px;
+  border-color: #ddd;
+  color: #666;
+  margin: 0 2px;
+}
+.theme-a .tag-chip { border-color: #ccc; color: #555; }
+.theme-a .room-chip.active,
+.theme-a .tag-chip.active {
+  background: #333;
+  color: #fff;
+  border-color: #333;
+}
+.theme-a .room-chip:hover,
+.theme-a .tag-chip:hover { background: #ece9e4; }
+.theme-a .room-dot { width: 8px; height: 8px; }
+
+/* Grid — gaps, no borders */
+.theme-a .gallery-grid {
+  gap: 12px;
+  padding: 12px;
+  border: none;
+}
+
+/* Cards — rounded, shadowed, no borders */
+.theme-a .gallery-card {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.theme-a .gallery-card:hover {
+  background: transparent;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+.theme-a .gallery-card.selected {
+  outline: 2px solid #333;
+  outline-offset: 0;
+}
+
+/* Photos — full color, rounded */
+.theme-a .card-photo { border-radius: 8px; }
+.theme-a .card-img { filter: none; }
+.theme-a .gallery-card:hover .card-img { filter: none; }
+
+/* Hover overlay — bottom gradient instead of full dark */
+.theme-a .card-hover-overlay {
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 50%, transparent 100%);
+  border-radius: 8px;
+}
+
+/* Modal — warm, rounded */
+.theme-a .detail-modal-backdrop { background: rgba(245, 243, 240, 0.9); }
+.theme-a .detail-modal-panel {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+}
+.theme-a .modal-photo { border-radius: 12px 12px 0 0; }
+.theme-a .modal-close {
+  border-radius: 50%;
+  background: rgba(0,0,0,0.35);
+  border: none;
+}
+
+/* Detail tags */
+.theme-a .tag-pill {
+  border-radius: 20px;
+  border-color: #ccc;
+}
+.theme-a .tag-pill.active { background: #333; border-color: #333; }
+
+/* Gallery back button */
+.theme-a .gallery-back-btn {
+  border-color: #ccc;
+  color: #666;
+  border-radius: 4px;
+}
+.theme-a .gallery-back-btn:hover { background: #ece9e4; color: #333; }
+
+/* ─── Landing ─── */
+.theme-a .landing-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  letter-spacing: 0.02em;
+}
+
+.theme-a .landing-hero {
+  border-radius: 8px;
+}
+
+.theme-a .landing-card:hover {
+  transform: translateY(-3px);
+}
+
+.theme-a .landing-card-label {
+  font-family: Georgia, 'Times New Roman', serif;
+  letter-spacing: 0.02em;
+}
+
+.theme-a .landing-mosaic {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* ─── Stack ─── */
+.theme-a .stack-header { background: #f5f3f0; }
+.theme-a .stack-back {
+  border-color: #ccc;
+  color: #666;
+  border-radius: 4px;
+}
+.theme-a .stack-back:hover { background: #ece9e4; color: #333; }
+
+.theme-a .stack-card {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.theme-a .stack-shadow {
+  border: none;
+  border-radius: 8px;
+  background: #ece9e4;
+}
+
+.theme-a .stack-photo { border-radius: 8px 8px 0 0; }
+
+.theme-a .stack-tag-pill {
+  border-color: #ccc;
+  border-radius: 20px;
+  color: #555;
+}
+
+.theme-a .stack-nav-btn {
+  border-color: #ccc;
+  color: #666;
+  border-radius: 4px;
+}
+.theme-a .stack-nav-btn:hover { background: #333; color: #fff; border-color: #333; }
+
+.theme-a .stack-progress { background: #e0ddd8; }
+.theme-a .stack-progress-fill { background: #333; }

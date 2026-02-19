@@ -1,0 +1,325 @@
+/* ─── Theme C: "Soft Editorial" ───
+   Headspace / modern editorial inspired.
+   White bg, generous spacing, rounded frames, name below photo, pastel chips. */
+
+.theme-c {
+  background: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Header */
+.theme-c .gallery-header {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  padding: 16px 20px 10px;
+}
+
+.theme-c .gallery-title {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  font-size: 22px;
+}
+
+.theme-c .gallery-count {
+  color: #aaa;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Size buttons */
+.theme-c .size-btn {
+  border-color: #ddd;
+  color: #999;
+  border-radius: 6px;
+  font-family: inherit;
+}
+.theme-c .size-btn:hover { background: #f5f5f5; color: #333; }
+.theme-c .size-btn.active {
+  background: #333;
+  color: #fff;
+  border-color: #333;
+}
+
+/* Theme picker */
+.theme-c .theme-btn.active { border-color: #333; }
+
+/* Room chips — colored pill backgrounds */
+.theme-c .room-chip {
+  border: none;
+  background: #f0f0f0;
+  color: #666;
+  border-radius: 20px;
+  margin: 0 2px;
+  font-family: inherit;
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 10px;
+}
+.theme-c .room-chip:hover { background: #e8e8e8; color: #333; }
+.theme-c .room-chip.active {
+  background: #333;
+  color: #fff;
+}
+
+/* Tag chips — pastel colors */
+.theme-c .tag-chip {
+  border: none;
+  background: #eef0f7;
+  color: #555;
+  border-radius: 20px;
+  margin: 0 2px;
+  font-family: inherit;
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 10px;
+}
+.theme-c .tag-chip:hover { background: #dde1f0; color: #333; }
+.theme-c .tag-chip.active {
+  background: #4a5568;
+  color: #fff;
+}
+.theme-c .tag-chip:nth-child(3n+1) { background: #eef0f7; }
+.theme-c .tag-chip:nth-child(3n+2) { background: #f0f7ee; }
+.theme-c .tag-chip:nth-child(3n+3) { background: #f7f0ee; }
+.theme-c .tag-chip:nth-child(3n+1):hover { background: #dde1f0; }
+.theme-c .tag-chip:nth-child(3n+2):hover { background: #e1f0dd; }
+.theme-c .tag-chip:nth-child(3n+3):hover { background: #f0e1dd; }
+.theme-c .tag-chip:nth-child(3n+1).active,
+.theme-c .tag-chip:nth-child(3n+2).active,
+.theme-c .tag-chip:nth-child(3n+3).active {
+  background: #4a5568;
+  color: #fff;
+}
+
+/* Grid — generous gaps, no borders */
+.theme-c .gallery-grid {
+  gap: 16px;
+  padding: 16px;
+  border: none;
+}
+
+/* Cards — framed, rounded, with name below */
+.theme-c .gallery-card {
+  border: none;
+  border-radius: 12px;
+  background: #f8f8f8;
+  padding: 6px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.theme-c .gallery-card:hover {
+  background: #fff;
+  transform: scale(1.02);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+.theme-c .gallery-card.selected {
+  outline: 2px solid #4a5568;
+  outline-offset: 0;
+}
+
+/* Photo — rounded within frame */
+.theme-c .card-photo {
+  border-radius: 6px;
+}
+.theme-c .card-img { filter: none; border-radius: 6px; }
+.theme-c .gallery-card:hover .card-img { filter: none; }
+
+/* Card name — visible below photo via ::after */
+.theme-c .gallery-card::after {
+  content: attr(data-name);
+  display: block;
+  padding: 6px 4px 2px;
+  font-size: 10px;
+  color: #999;
+  text-transform: none;
+  letter-spacing: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: inherit;
+}
+
+/* Hover overlay — lighter */
+.theme-c .card-hover-overlay {
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 6px;
+}
+
+/* Modal — soft, rounded, shadowed */
+.theme-c .detail-modal-backdrop { background: rgba(255, 255, 255, 0.88); }
+.theme-c .detail-modal-panel {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12);
+}
+.theme-c .modal-photo { border-radius: 16px 16px 0 0; }
+.theme-c .modal-close {
+  border-radius: 50%;
+  background: rgba(0,0,0,0.3);
+  border: none;
+}
+.theme-c .modal-info { padding: 18px 20px 20px; }
+.theme-c .detail-name {
+  font-family: inherit;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 16px;
+}
+.theme-c .detail-path {
+  font-family: inherit;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.theme-c .detail-desc {
+  font-family: inherit;
+  font-style: normal;
+  color: #666;
+  border-color: #f0f0f0;
+}
+.theme-c .detail-props,
+.theme-c .detail-extra { border-color: #f0f0f0; }
+.theme-c .prop-row {
+  text-transform: none;
+  font-family: inherit;
+  font-size: 11px;
+}
+.theme-c .prop-label { color: #aaa; }
+
+/* Detail tags — soft */
+.theme-c .detail-tags { border-color: #f0f0f0; }
+.theme-c .tags-label { color: #aaa; font-family: inherit; text-transform: none; letter-spacing: 0; }
+.theme-c .tag-pill {
+  border: none;
+  background: #eef0f7;
+  color: #555;
+  border-radius: 20px;
+  margin: 2px;
+  font-family: inherit;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.theme-c .tag-pill:hover { background: #dde1f0; }
+.theme-c .tag-pill.active { background: #4a5568; color: #fff; }
+
+/* Gallery back button */
+.theme-c .gallery-back-btn {
+  border-color: #ddd;
+  color: #999;
+  border-radius: 6px;
+}
+.theme-c .gallery-back-btn:hover { background: #f5f5f5; color: #333; }
+
+/* ─── Landing ─── */
+.theme-c .landing-title {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-size: 26px;
+}
+
+.theme-c .landing-subtitle {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-style: normal;
+  color: #999;
+}
+
+.theme-c .landing-hero { border-radius: 12px; }
+
+.theme-c .landing-card-label {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 18px;
+}
+
+.theme-c .landing-card-subtitle {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-style: normal;
+  color: #999;
+}
+
+.theme-c .landing-card-count { color: #bbb; }
+
+.theme-c .landing-mosaic {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ─── Stack ─── */
+.theme-c .stack-header { background: #fff; }
+.theme-c .stack-back {
+  border-color: #ddd;
+  color: #999;
+  border-radius: 6px;
+}
+.theme-c .stack-back:hover { background: #f5f5f5; color: #333; }
+
+.theme-c .stack-title {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.theme-c .stack-subtitle {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-style: normal;
+  color: #aaa;
+}
+
+.theme-c .stack-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+  background: #f8f8f8;
+  padding: 6px;
+}
+
+.theme-c .stack-shadow {
+  border: none;
+  border-radius: 12px;
+  background: #f0f0f0;
+}
+
+.theme-c .stack-photo { border-radius: 8px; }
+.theme-c .stack-img { border-radius: 8px; }
+
+.theme-c .stack-item-name {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.theme-c .stack-item-meta {
+  font-family: inherit;
+  text-transform: none;
+  letter-spacing: 0;
+  color: #aaa;
+}
+
+.theme-c .stack-item-desc {
+  font-family: inherit;
+  font-style: normal;
+  color: #666;
+}
+
+.theme-c .stack-tag-pill {
+  border: none;
+  background: #eef0f7;
+  color: #555;
+  border-radius: 20px;
+  font-family: inherit;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.theme-c .stack-nav-btn {
+  border-color: #ddd;
+  color: #666;
+  border-radius: 6px;
+  font-family: inherit;
+}
+.theme-c .stack-nav-btn:hover { background: #4a5568; color: #fff; border-color: #4a5568; }
+
+.theme-c .stack-progress { background: #f0f0f0; }
+.theme-c .stack-progress-fill { background: #4a5568; }
