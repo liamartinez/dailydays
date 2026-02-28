@@ -170,6 +170,47 @@
       color: var(--color-text-muted);
     }
 
+    /* ── Section dividers ── */
+    .section-header {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 32px 0;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    .section-count {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--color-text-muted);
+    }
+
+    .section-rule {
+      max-width: 1200px;
+      margin: 12px auto 0;
+      padding: 0 32px;
+    }
+
+    .section-rule hr {
+      border: none;
+      border-top: 1px solid var(--color-border-lt);
+    }
+
+    @media (max-width: 560px) {
+      .section-header { padding: 40px 20px 0; }
+      .section-rule { padding: 0 20px; }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       .project-card, .card-screenshot img { transition: none !important; }
     }
@@ -179,8 +220,14 @@
 
   <header class="page-header">
     <h1 class="page-title">Daily Days</h1>
-    <span class="page-meta">7 experiments</span>
+    <span class="page-meta">11 experiments</span>
   </header>
+
+  <div class="section-header">
+    <span class="section-label">Dailydays</span>
+    <span class="section-count">7</span>
+  </div>
+  <div class="section-rule"><hr></div>
 
   <div class="grid-wrap">
     <div class="project-grid">
@@ -287,6 +334,78 @@
         <div class="card-info">
           <h2 class="card-title">Already Got It — Chrome Extension Demo</h2>
           <span class="card-dir">05f_alreadygotit</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-label">Daily</span>
+    <span class="section-count">4</span>
+  </div>
+  <div class="section-rule"><hr></div>
+
+  <div class="grid-wrap">
+    <div class="project-grid">
+
+      <a href="https://liamartinez.github.io/Daily/01_duck/" class="project-card" target="_blank" rel="noopener">
+        <div class="card-screenshot">
+          <img src="./screenshots/daily_01_duck.png" alt="Duck & Truck Alert" loading="lazy"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="card-screenshot-fallback" style="display:none;">
+            <span class="fallback-emoji">🦆</span>
+            <span class="fallback-label">Screenshot pending</span>
+          </div>
+        </div>
+        <div class="card-info">
+          <h2 class="card-title">Duck & Truck Alert</h2>
+          <span class="card-dir">01_duck</span>
+        </div>
+      </a>
+
+      <a href="https://liamartinez.github.io/Daily/02_findmy/" class="project-card" target="_blank" rel="noopener">
+        <div class="card-screenshot">
+          <img src="./screenshots/daily_02_findmy.png" alt="Find My" loading="lazy"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="card-screenshot-fallback" style="display:none;">
+            <span class="fallback-emoji">📍</span>
+            <span class="fallback-label">Screenshot pending</span>
+          </div>
+        </div>
+        <div class="card-info">
+          <h2 class="card-title">Find My</h2>
+          <span class="card-dir">02_findmy</span>
+        </div>
+      </a>
+
+      <a href="https://liamartinez.github.io/Daily/03_findmy_watch/" class="project-card" target="_blank" rel="noopener">
+        <div class="card-screenshot">
+          <img src="./screenshots/daily_03_findmy_watch.png" alt="Find My Friend — Kids Watch" loading="lazy"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="card-screenshot-fallback" style="display:none;">
+            <span class="fallback-emoji">⌚</span>
+            <span class="fallback-label">Screenshot pending</span>
+          </div>
+        </div>
+        <div class="card-info">
+          <h2 class="card-title">Find My Friend — Kids Watch</h2>
+          <span class="card-dir">03_findmy_watch</span>
+        </div>
+      </a>
+
+      <a href="https://liamartinez.github.io/Daily/05_diskcleanup/" class="project-card" target="_blank" rel="noopener">
+        <div class="card-screenshot">
+          <img src="./screenshots/daily_05_diskcleanup.png" alt="Declutter" loading="lazy"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="card-screenshot-fallback" style="display:none;">
+            <span class="fallback-emoji">💾</span>
+            <span class="fallback-label">Screenshot pending</span>
+          </div>
+        </div>
+        <div class="card-info">
+          <h2 class="card-title">Declutter</h2>
+          <span class="card-dir">05_diskcleanup</span>
         </div>
       </a>
 

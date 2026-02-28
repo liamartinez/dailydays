@@ -2,10 +2,62 @@
 // 5 themed cart cycles that rotate automatically
 
 import { OBJECTS } from '../../shared/js/data.js';
-import { renderApp } from './ui.js';
+import { renderApp } from './ui.js?v=6';
+import { config, initSandbox } from './sandbox.js?v=6';
+
+initSandbox();
 
 // ── Helper: look up DB item by obj ID ───────────────────────────────
 const byId = id => OBJECTS.find(o => o.id === id);
+
+// ── Per-cycle store branding (parallel to CYCLES) ───────────────────
+const STORES = [
+  {
+    name: 'pantrypal',
+    suffix: '.co',
+    accent: '#2d7d46',
+    className: 'store-pantrypal',
+    navLinks: ['Grocery', 'Kitchen', 'Pantry'],
+    searchPlaceholder: 'Search groceries...',
+    checkoutText: 'Place Order',
+  },
+  {
+    name: 'threadbare',
+    suffix: '',
+    accent: '#1a1a2e',
+    className: 'store-threadbare',
+    navLinks: ['Women', 'Men', 'Accessories'],
+    searchPlaceholder: 'Search styles...',
+    checkoutText: 'Checkout Now',
+  },
+  {
+    name: 'loft & found',
+    suffix: '',
+    accent: '#8b6914',
+    className: 'store-loftfound',
+    navLinks: ['Living', 'Decor', 'Gifts'],
+    searchPlaceholder: 'Search home decor...',
+    checkoutText: 'Complete Purchase',
+  },
+  {
+    name: 'glow',
+    suffix: '.',
+    accent: '#c2185b',
+    className: 'store-glow',
+    navLinks: ['Skincare', 'Hair', 'Body'],
+    searchPlaceholder: 'Search beauty...',
+    checkoutText: 'Get it Now',
+  },
+  {
+    name: 'circuitry',
+    suffix: '.io',
+    accent: '#0d47a1',
+    className: 'store-circuitry',
+    navLinks: ['Tech', 'Office', 'Cables'],
+    searchPlaceholder: 'Search tech & office...',
+    checkoutText: 'Proceed to Checkout',
+  },
+];
 
 // ── 5 Themed cart cycles ────────────────────────────────────────────
 const CYCLES = [
@@ -75,26 +127,71 @@ for (const cycle of CYCLES) {
 
 // ── Cycle state ─────────────────────────────────────────────────────
 let currentCycle = 0;
+let currentStoreClass = '';
 const container = document.getElementById('app');
+let pendingTimers = [];
+
+function clearTimers() {
+  pendingTimers.forEach(id => clearTimeout(id));
+  pendingTimers = [];
+}
+
+function later(fn, ms) {
+  const id = setTimeout(fn, ms / config.speed);
+  pendingTimers.push(id);
+}
 
 // ── Auto-play timeline ──────────────────────────────────────────────
 // Each cycle: empty cart → items appear → panel slides in → scanning →
 // matches revealed (with cart highlights) → savings → pause → reset
 
-function startTimeline() {
+function getEffectiveItems(cycle) {
+  // Apply matchCount from sandbox: keep first N matchable items as matched
+  const matchLimit = config.matchCount;
+  let matchesSeen = 0;
+  return cycle.items.map(item => {
+    if (item.matched && item.dbItem) {
+      matchesSeen++;
+      if (matchesSeen > matchLimit) {
+        return { ...item, matched: false, _suppressed: true };
+      }
+    }
+    return item;
+  });
+}
+
+function buildCycle() {
   const cycle = CYCLES[currentCycle];
-  const matchedItems = cycle.items.filter(c => c.matched);
+  const store = STORES[currentCycle];
+  const items = getEffectiveItems(cycle);
+  const matchedItems = items.filter(c => c.matched);
   const savings = matchedItems.reduce((sum, c) => sum + c.price * c.qty, 0);
   const stats = {
     savings,
     matchCount: matchedItems.length,
-    totalCount: cycle.items.length,
+    totalCount: items.length,
     label: cycle.label,
   };
 
-  // Render page with empty cart
-  renderApp(container, cycle.items, stats);
+  // Apply store theme
+  document.documentElement.style.setProperty('--accent', store.accent);
+  if (currentStoreClass) container.classList.remove(currentStoreClass);
+  container.classList.add(store.className);
+  currentStoreClass = store.className;
 
+  renderApp(container, items, stats, config.detailLevel, store);
+
+  // Order summary starts hidden
+  document.querySelector('.order-summary').classList.add('summary--hidden');
+
+  // Apply backdrop opacity setting
+  const backdrop = document.querySelector('.overlay-backdrop');
+  backdrop.style.setProperty('--backdrop-opacity', config.backdropOpacity / 100);
+
+  return { cycle, items, matchedItems, stats, store };
+}
+
+function runTimeline({ cycle, items, matchedItems, stats }) {
   const cartRows = document.querySelectorAll('.cart-item');
   const cartTitle = document.querySelector('.cart-title');
   const orderSummary = document.querySelector('.order-summary');
@@ -105,75 +202,136 @@ function startTimeline() {
   const matchRows = document.querySelectorAll('.match-row');
   const panelSummary = document.querySelector('.panel-summary');
 
-  // Order summary starts hidden
-  orderSummary.classList.add('summary--hidden');
-
-  // ── Phase 1 (0–2.2s): Cart items appear one by one ────────────
-  const ITEM_STAGGER = 280; // ms between each item
+  // ── Phase 1: Cart items appear one by one ──────────────────────
+  const ITEM_STAGGER = 280;
   cartRows.forEach((row, i) => {
-    setTimeout(() => {
+    later(() => {
       row.classList.add('revealed');
-      // Update cart title count
       cartTitle.textContent = `Your Cart (${i + 1} item${i + 1 > 1 ? 's' : ''})`;
     }, 300 + i * ITEM_STAGGER);
   });
 
   // Show order summary after all items are in
   const allItemsIn = 300 + cartRows.length * ITEM_STAGGER + 200;
-  setTimeout(() => {
-    cartTitle.textContent = `Your Cart (${cycle.items.length} items)`;
+  later(() => {
+    cartTitle.textContent = `Your Cart (${items.length} items)`;
     orderSummary.classList.remove('summary--hidden');
   }, allItemsIn);
 
-  // ── Phase 2 (3s): Panel slides in with "scanning" state ───────
+  // ── Phase 2: Panel slides in with "scanning" state ─────────────
   const panelIn = allItemsIn + 600;
-  setTimeout(() => {
+  later(() => {
     backdrop.classList.add('active');
     panel.classList.add('visible');
-    // Panel starts in scanning state (set via CSS class on scan-bar)
     scanBar.classList.add('scanning');
     scanText.textContent = 'Scanning your cart...';
   }, panelIn);
 
-  // ── Phase 3 (4s): Scan complete, matches stagger in ───────────
+  // ── Phase 3: Scan complete, matches stagger in ─────────────────
   const scanDone = panelIn + 1000;
-  setTimeout(() => {
+  later(() => {
     scanBar.classList.remove('scanning');
-    scanText.textContent = `${stats.matchCount} of ${stats.totalCount} cart items matched to your home inventory`;
+    if (matchedItems.length === 0) {
+      scanText.textContent = 'No matches found in your home inventory';
+    } else {
+      scanText.textContent = `${stats.matchCount} of ${stats.totalCount} cart items matched to your home inventory`;
+    }
     matchRows.forEach(row => row.classList.add('revealed'));
   }, scanDone);
 
   // Highlight matched cart rows as their match-row appears
-  // Match rows have staggered CSS delays: 0, 0.35, 0.7, 1.05s
   matchedItems.forEach((item, i) => {
-    const cartIndex = cycle.items.indexOf(item);
-    const delay = i * 350; // matches CSS stagger
-    setTimeout(() => {
+    const cartIndex = items.indexOf(item);
+    const delay = i * 350;
+    later(() => {
       if (cartRows[cartIndex]) {
         cartRows[cartIndex].classList.add('cart-item--flagged');
       }
     }, scanDone + delay + 100);
   });
 
-  // ── Phase 4 (7.5s): Summary fades in ──────────────────────────
+  // ── Phase 4: Summary fades in ──────────────────────────────────
   const summaryIn = scanDone + 2800;
-  setTimeout(() => {
-    panelSummary.classList.add('revealed');
-  }, summaryIn);
+  if (matchedItems.length > 0) {
+    later(() => {
+      panelSummary.classList.add('revealed');
+    }, summaryIn);
+  }
 
-  // ── Phase 5 (11s): Fade out everything, advance cycle ─────────
+  // ── Phase 5: Fade out, build next cycle while hidden, fade in ──
+  if (!config.autoCycle) return; // stop here if auto-cycle is off
+
   const fadeOut = summaryIn + 2500;
-  setTimeout(() => {
-    // Fade the whole page out
+  later(() => {
     container.classList.add('cycle-fade-out');
   }, fadeOut);
 
-  // After fade completes, reset and start next cycle
-  setTimeout(() => {
-    container.classList.remove('cycle-fade-out');
+  later(() => {
     currentCycle = (currentCycle + 1) % CYCLES.length;
-    startTimeline();
+    const nextData = buildCycle();
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        container.classList.remove('cycle-fade-out');
+        later(() => runTimeline(nextData), 500);
+      });
+    });
   }, fadeOut + 600);
 }
 
-startTimeline();
+// ── Sandbox event listeners ─────────────────────────────────────────
+
+// Jump to fully-revealed state so sandbox tweaks give instant feedback
+function showInstant() {
+  clearTimers();
+  container.classList.remove('cycle-fade-out');
+  const data = buildCycle();
+
+  // Reveal all cart items immediately (skip animation)
+  const cartRows = document.querySelectorAll('.cart-item');
+  const cartTitle = document.querySelector('.cart-title');
+  const orderSummary = document.querySelector('.order-summary');
+  cartRows.forEach(row => row.classList.add('revealed'));
+  cartTitle.textContent = `Your Cart (${data.items.length} items)`;
+  orderSummary.classList.remove('summary--hidden');
+
+  // Show panel + matches immediately
+  const backdrop = document.querySelector('.overlay-backdrop');
+  const panel = document.querySelector('.extension-panel');
+  const scanBar = document.querySelector('.scan-bar');
+  const scanText = document.querySelector('.scan-text');
+  const matchRows = document.querySelectorAll('.match-row');
+  const panelSummary = document.querySelector('.panel-summary');
+
+  backdrop.classList.add('active');
+  panel.classList.add('visible');
+  scanBar.classList.remove('scanning');
+
+  if (data.matchedItems.length === 0) {
+    scanText.textContent = 'No matches found in your home inventory';
+  } else {
+    scanText.textContent = `${data.stats.matchCount} of ${data.stats.totalCount} cart items matched to your home inventory`;
+  }
+
+  matchRows.forEach(row => row.classList.add('revealed'));
+  data.matchedItems.forEach(item => {
+    const idx = data.items.indexOf(item);
+    if (cartRows[idx]) cartRows[idx].classList.add('cart-item--flagged');
+  });
+
+  if (data.matchedItems.length > 0) {
+    panelSummary.classList.add('revealed');
+  }
+}
+
+window.addEventListener('sandbox-change', showInstant);
+window.addEventListener('sandbox-restart', () => {
+  clearTimers();
+  container.classList.remove('cycle-fade-out');
+  currentCycle = 0;
+  const data = buildCycle();
+  runTimeline(data);
+});
+
+// ── Kick off ──────────────────────────────────────────────────────
+const firstData = buildCycle();
+runTimeline(firstData);
